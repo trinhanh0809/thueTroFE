@@ -1,0 +1,67 @@
+/* ===== Input ===== */
+.ui-field { display: grid; gap: 8px; }
+.ui-field-lg .ui-input { padding: 14px 14px; font-size: 16px; }
+.ui-label { font-size: 14px; font-weight: 600; color: #374151; }
+.ui-label .req { color: #ef4444; }
+
+.ui-control { position: relative; }
+.ui-control.with-adorn .ui-input { padding-left: 40px; }
+.ui-control.with-adorn .ui-input:has(+ .right) { padding-right: 40px; }
+
+.ui-input {
+  width: 100%;
+  padding: 12px 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color .15s ease, box-shadow .15s ease;
+  background: #fff;
+}
+.ui-input:focus { border-color: #93c5fd; box-shadow: 0 0 0 3px rgba(59,130,246,.15); }
+.is-invalid .ui-input { border-color: #ef4444; box-shadow: 0 0 0 3px rgba(239,68,68,.12); }
+.is-disabled .ui-input { background: #f3f4f6; cursor: not-allowed; }
+
+.ui-adorn {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 28px; height: 28px; color: #6b7280;
+}
+.ui-adorn.left { left: 8px; }
+.ui-adorn.right { right: 8px; }
+.ui-eye { background: transparent; border: 0; cursor: pointer; font-size: 16px; }
+
+.ui-help { font-size: 12px; color: #6b7280; }
+.ui-help.error { color: #b91c1c; }
+
+/* ===== Buttons ===== */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: 8px; border-radius: 999px; padding: 10px 16px;
+  font-weight: 700; cursor: pointer; border: 1px solid transparent;
+  transition: filter .15s ease, background .15s ease, color .15s ease;
+}
+.btn:disabled { opacity: .7; cursor: default; }
+
+.btn-primary {
+  color: #fff; background: linear-gradient(90deg, #e41b77, #6e52ff);
+}
+.btn-primary:hover { filter: brightness(.97); }
+
+.btn-outline {
+  color: #0b5ed7; background: #fff; border-color: #0b5ed7;
+}
+.btn-outline:hover { background: #eef5ff; }
+
+.btn-link {
+  background: transparent; color: #0b5ed7; border-color: transparent;
+}
+.btn-link:hover { text-decoration: underline; }
+
+.btn-lg { padding: 12px 18px; font-size: 16px; }
+.btn-full { width: 100%; }
+
+.btn-right { display: inline-flex; }
+.btn-icon-right { display: inline-block; margin-left: 4px; }
+
+/* ví dụ style “Xem tất cả →” (viền xanh) = btn-outline + iconRight="arrow" */
