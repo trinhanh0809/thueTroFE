@@ -1,5 +1,5 @@
 import clsx from 'clsx'
-import '@/pages/ui/Ui.css'
+import '@/components/ui/Ui.css'
 
 /**
  * Reusable Button
@@ -24,12 +24,22 @@ export default function Button({
 }) {
   const isDisabled = disabled || loading
   const rightIcon =
-    iconRight === 'arrow' ? <span className="btn-icon-right">→</span> : iconRight || null
+    iconRight === 'arrow' ? (
+      <span className="btn-icon-right">→</span>
+    ) : (
+      iconRight || null
+    )
 
   return (
     <button
       type={type}
-      className={clsx('btn', `btn-${variant}`, size === 'lg' && 'btn-lg', full && 'btn-full', className)}
+      className={clsx(
+        'btn',
+        `btn-${variant}`,
+        size === 'lg' && 'btn-lg',
+        full && 'btn-full',
+        className
+      )}
       disabled={isDisabled}
       {...rest}
     >

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import AuthApi from '@/api/AuthApi'
+import AuthApi from '@/api'
 
 export default function HostStatus() {
   const [data, setData] = useState(null)

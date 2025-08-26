@@ -1,6 +1,7 @@
 import http from './http'
 
-const AuthApi = {
+const apiList = {
+  // User
   register: (data) => http.post('/user/register', data),
   activate: (query) => http.get('/user/activate', query), // { email, code }
   login: (data) => http.post('/user/authenticate', data),
@@ -10,6 +11,9 @@ const AuthApi = {
   changeAvatar: (data) => http.put('/user/change-avatar', data), // { url }
   updateProfile: (data) => http.put('/user/update-profile', data),
   myHostStatus: () => http.get('/user/me/host-status'),
+
+  // RoomType
+getRoomType: () => http.get('/room-types'),
 }
 
-export default AuthApi
+export default apiList

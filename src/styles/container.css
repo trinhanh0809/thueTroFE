@@ -1,0 +1,40 @@
+:root{
+  --container-max: 1480px;  /* tùy trang: 1100/1200/1280px */
+  --container-pad: 16px;    /* gutter 2 bên */
+  --gap: 24px;
+}
+
+/* Dùng chung cho mọi trang */
+.container {
+  max-width: var(--container-max) !important;
+  width: 100%;
+  margin-inline: auto;         /* căn giữa */
+  padding-inline: var(--container-pad);
+}
+
+/* Nếu muốn có khoảng cách dọc cho page */
+.page {
+  padding-block: 24px;
+}
+
+/* Lưới sidebar - content như ảnh */
+.grid-2 {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: var(--gap);
+  align-items: start;
+}
+
+/* Card cơ bản (tùy bạn đã có style rồi thì bỏ) */
+.card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 1px 2px rgba(16,24,40,.06);
+  padding: 16px;
+  border: 1px solid #eee;
+}
+
+/* Responsive: mobile xếp dọc */
+@media (max-width: 1024px){
+  .grid-2 { grid-template-columns: 1fr; }
+}

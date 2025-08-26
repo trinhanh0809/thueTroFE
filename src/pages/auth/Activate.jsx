@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import AuthApi from '@/api/AuthApi'
+import AuthApi from '@/api'
 
 export default function Activate() {
   const [params] = useSearchParams()

@@ -1,0 +1,38 @@
+/* font */
+body { font-family: 'Inter', -apple-system, 'Segoe UI', sans-serif; }
+
+.tm-footer {
+  background: #fff;
+  border-top: 1px solid #eef0f3;
+  padding: 24px 0 0;
+}
+
+.tm-col-title {
+  color: #1d57c5;          /* xanh giống ảnh */
+  text-transform: uppercase;
+  letter-spacing: .3px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.tm-list { list-style: none; padding: 0; margin: 0; }
+.tm-list li { margin: 8px 0; }
+.tm-list a { color: #2b2f33; text-decoration: none; }
+.tm-list a:hover { color: #1d57c5; text-decoration: underline; }
+
+.app-badge img { display:block; }
+
+.tm-social {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  border: 1px solid #e5e8ef;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.tm-social:hover { background: #1d57c5; color: #fff; }
+
+.tm-bottom {
+  background: #0a4aa6;       /* thanh xanh cuối cùng */
+  color: #fff;
+  margin-top: 24px;
+  padding: 10px 0;
+}

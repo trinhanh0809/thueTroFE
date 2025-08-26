@@ -1,7 +1,7 @@
 // redux/authSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { jwtDecode } from 'jwt-decode'
-import AuthApi from '@/api/AuthApi'
+import apiList from '@/api/index.js'
 import { setToken as persistToken } from '@/api/http'
 
 const initialToken = typeof localStorage !== 'undefined' ? localStorage.getItem('token') : null
@@ -18,7 +18,7 @@ const parseUser = (t) => {
 // LẤY HỒ SƠ /user/me
 export const fetchMe = createAsyncThunk('auth/fetchMe', async (_, { rejectWithValue }) => {
   try {
-    const { data } = await AuthApi.me()
+    const { data } = await apiList.me()
     console.log("data", data)
     // data = { id, username, email, firstName, lastName, phoneNumber, avatar, enabled, isHost, roles }
     return data
@@ -31,7 +31,7 @@ export const fetchMe = createAsyncThunk('auth/fetchMe', async (_, { rejectWithVa
 // redux/authSlice.js
 export const loginAsync = createAsyncThunk('auth/login', async (payload, { rejectWithValue }) => {
   try {
-    const res = await AuthApi.login(payload);
+    const res = await apiList.login(payload);
     const d = res?.data;
 
     // 👉 thêm d?.jwtToken vào danh sách fallback
