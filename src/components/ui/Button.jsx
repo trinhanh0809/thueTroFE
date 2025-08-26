@@ -1,15 +1,6 @@
 import clsx from 'clsx'
 import '@/components/ui/Ui.css'
 
-/**
- * Reusable Button
- * Props:
- * - variant: 'primary' | 'outline' | 'link'
- * - size: 'md' | 'lg'
- * - full: boolean (full width)
- * - loading: boolean
- * - iconRight: 'arrow' | ReactNode
- */
 export default function Button({
   children,
   type = 'button',
