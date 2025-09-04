@@ -38,7 +38,7 @@
   font-weight: 800;
   letter-spacing: .2px;
 }
-.brand img { height: 30px; width: auto; }
+.brand img { height: 40px; width: auto; }
 .brand span { font-size: 18px; }
 
 /* ===== Nav ===== */
@@ -56,9 +56,10 @@
   display: inline-block;
   color: var(--tm-text);
   text-decoration: none;
-  font-size: 14px;
+  font-size: 16px;
   padding: 8px 0;
   border-bottom: 2px solid transparent;
+  font-weight: 600;
 }
 .nav-link:hover,
 .nav a:hover { color: #111827; }
@@ -199,4 +200,9 @@
     overflow-x: auto;
   }
   .hamburger { display: inline-flex; }
+}
+
+.bottom_btn {
+  font-size: 16px;
+  font-weight: 600;
 }

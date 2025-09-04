@@ -1,8 +1,6 @@
 // src/App.jsx
 import { useEffect } from 'react'
-import { Routes, Route, Navigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
-import ProtectedRoute from '@/components/ProtectedRoute'
 import { fetchMe } from '@/redux/authSlice'
 import AppRoutes from '@/routes/renderRoute.jsx'
 

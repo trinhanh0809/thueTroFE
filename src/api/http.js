@@ -46,13 +46,31 @@ instance.interceptors.request.use((config) => {
 
 instance.interceptors.response.use(
   (res) => res,
-  (err) => {
-    const msg =
-      err?.response?.data?.message ||
-      err?.response?.data?.error ||
-      err?.message ||
-      'Request failed'
-    return Promise.reject(new Error(msg))
+  (error) => {
+    // Lỗi mạng/CORS/timeout: không có response
+    if (!error.response) {
+      error.message = error.message || 'Không thể kết nối máy chủ.'
+      return Promise.reject(error)
+    }
+
+    const status = error.response.status
+    const apiMsg =
+      error.response.data?.message ||
+      error.response.data?.error
+
+    const fallback =
+      status === 400 ? 'Dữ liệu không hợp lệ. Vui lòng kiểm tra lại.' :
+      status === 401 ? 'Bạn cần đăng nhập để tiếp tục.' :
+      status === 403 ? 'Bạn không có quyền thực hiện thao tác này.' :
+      status === 404 ? 'Không tìm thấy tài nguyên.' :
+      status === 409 ? 'Xung đột dữ liệu.' :
+      status === 422 ? 'Dữ liệu không hợp lệ. Vui lòng sửa và thử lại.' :
+      status === 429 ? 'Bạn thao tác quá nhanh. Vui lòng thử lại sau.' :
+      status >= 500 ? 'Máy chủ đang gặp sự cố. Vui lòng thử lại sau.' :
+      'Đã xảy ra lỗi. Vui lòng thử lại.'
+
+    error.message = apiMsg || fallback
+    return Promise.reject(error) // ❗ giữ nguyên AxiosError để còn có .response.status
   }
 )
 
