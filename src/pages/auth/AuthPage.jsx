@@ -84,7 +84,7 @@ export default function AuthPage() {
         delete AuthApi.defaults.headers.Authorization
       setLoginForm({ username: regForm.username, password: '' })
     } catch (err) {
-      setError('Đăng ký thất bại')
+      setError(err.message || 'Đăng ký thất bại')
     }
   }
 
