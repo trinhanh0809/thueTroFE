@@ -10,11 +10,11 @@ import Forbidden403 from '@/pages/error/Forbidden403'
 
 import RoleGuard from './RoleGuard'
 import AdminLayout from '@/manager/components/AdminLayout'
-import UserManager from '@/manager/admin/components/UserManager'
+import UserManager from '@/manager/admin/UserManager'
 import Dashboard from '@/manager/admin/Dashboard'
 import HostPage from '@/manager/host/Host'
-import RoomTypeManager from '@/manager/admin/components/RoomTypeManager'
-import RoomManager from '@/manager/admin/components/RoomManager'
+import RoomTypeManager from '@/manager/admin/RoomTypeManager'
+import RoomManager from '@/manager/admin/RoomManager'
 
 const adminNavItems = [
   { key: 'admin-home', label: 'Trang chủ', to: '/admin', end: true },
