@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import AccountFormModal from './form'
@@ -23,20 +23,63 @@ export default function UserManager() {
   const [loadingList, setLoadingList] = useState(false)
 
   const [formOpen, setFormOpen] = useState(false)
-  const [formMode, setFormMode] = useState('create') // 'create' | 'edit' | 'detail'
+  const [formMode, setFormMode] = useState('create')
   const [editing, setEditing] = useState(null)
 
   const [confirmOpen, setConfirmOpen] = useState(false)
   const [targetRow, setTargetRow] = useState(null)
 
-  const [busy, setBusy] = useState(false)
+  // ---- server-side pagination + filters ----
+  const [page, setPage] = useState(0)
+  const [size, setSize] = useState(10)
+  const [totalPages, setTotalPages] = useState(0)
+  const [totalElements, setTotalElements] = useState(0)
 
-  const getApi = async () => {
+  const [q, setQ] = useState('')
+  const [enabled, setEnabled] = useState('')
+  const [isHost, setIsHost] = useState('')
+  const [qInput, setQInput] = useState('')
+
+  const canPrev = page > 0
+  const canNext = page + 1 < totalPages
+  // ---- đồng bộ URL mỗi khi filter/phân trang đổi ----
+  const syncUrl = () => {
+    const sp = new URLSearchParams()
+    sp.set('page', page)
+    sp.set('size', size)
+    if (q) sp.set('q', q)
+    else sp.delete('q')
+    if (enabled) sp.set('enabled', enabled)
+    else sp.delete('enabled')
+    if (isHost) sp.set('isHost', isHost)
+    else sp.delete('isHost')
+    window.history.replaceState(
+      {},
+      '',
+      `${window.location.pathname}?${sp.toString()}`
+    )
+  }
+
+  const buildParams = () => {
+    const p = { page, size }
+    if (q) p.q = q
+    if (enabled) p.enabled = enabled
+    if (isHost) p.isHost = isHost
+    return p
+  }
+
+  const fetchList = async () => {
     setLoadingList(true)
     try {
-      const { status, data } = await apiList.getAll()
-      if (status === 200) setData(Array.isArray(data) ? data : [])
-      else toast.error('Không thể tải danh sách')
+      syncUrl()
+      const { status, data } = await apiList.getUser(buildParams())
+      if (status === 200) {
+        setData(Array.isArray(data?.content) ? data.content : [])
+        setTotalPages(data?.totalPages ?? 0)
+        setTotalElements(data?.totalElements ?? 0)
+      } else {
+        toast.error('Không thể tải danh sách')
+      }
     } catch (err) {
       console.error(err)
       toast.error('Tải danh sách thất bại')
@@ -46,45 +89,41 @@ export default function UserManager() {
   }
 
   useEffect(() => {
-    getApi()
-  }, [])
+    fetchList()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page, size, q, enabled, isHost])
+
+  const onSearchSubmit = () => {
+    setPage(0)
+    setQ(qInput)
+  }
+
+  const handleEnabledChange = (e) => {
+    setEnabled(e.target.value)
+    setPage(0)
+  }
+  const handleIsHostChange = (e) => {
+    setIsHost(e.target.value)
+    setPage(0)
+  }
 
   const handleEdit = (row) => {
     setEditing(row)
     setFormMode('edit')
     setFormOpen(true)
   }
-
   const handleView = (row) => {
-    setEditing(row) // truyền đúng 1 user
-    setFormMode('detail') // xem
+    setEditing(row)
+    setFormMode('detail')
     setFormOpen(true)
   }
-
   const openConfirmToggle = (row) => {
     setTargetRow(row)
     setConfirmOpen(true)
   }
 
-  // Submit form (create/update) — KHÔNG gọi getApi ở đây nữa, form sẽ gọi
-  const onSubmitForm = async (values) => {
-    setBusy(true)
-    try {
-      await toast.promise(apiList.adminUpdateUser(editing.id, values), {
-        pending: 'Đang cập nhật...',
-        success: 'Đã cập nhật tài khoản',
-        error: 'Cập nhật thất bại',
-      })
-
-      // getApi sẽ được gọi từ form sau khi submit thành công
-    } finally {
-      setBusy(false)
-    }
-  }
-
   const onConfirmToggle = async () => {
     if (!targetRow) return
-    setBusy(true)
     try {
       const action = targetRow.enabled ? 'vô hiệu hoá' : 'mở khoá'
       await toast.promise(apiList.toggleEnabled(targetRow.id), {
@@ -92,11 +131,11 @@ export default function UserManager() {
         success: `Đã ${action} tài khoản`,
         error: 'Thao tác thất bại',
       })
-      await getApi()
+      await fetchList()
       setConfirmOpen(false)
       setTargetRow(null)
-    } finally {
-      setBusy(false)
+    } catch (err) {
+      console.log(err)
     }
   }
 
@@ -104,6 +143,56 @@ export default function UserManager() {
     <div className="container py-4">
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h4 className="mb-0">Quản lý tài khoản</h4>
+      </div>
+      <div className="card border-0 shadow-sm rounded-4 mb-3">
+        <div className="card-body flex-wrap gap-2 align-items-center">
+          <div className="input-group mb-4" style={{ maxWidth: 360 }}>
+            <input
+              className="form-control"
+              placeholder="Tìm theo tên tài khoản"
+              value={qInput}
+              onChange={(e) => setQInput(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && onSearchSubmit()}
+            />
+            <button className="btn btn-primary" onClick={onSearchSubmit}>
+              <i className="bi bi-search" />
+            </button>
+          </div>
+
+          {/* Enabled select */}
+          <div className="d-flex align-items-center  gap-4 ">
+            <div className="d-flex align-items-center gap-2">
+              <select
+                className="form-select form-select-sm"
+                value={enabled}
+                onChange={handleEnabledChange}
+                style={{ width: 320 }}
+              >
+                <option value="" disabled hidden>
+                  Trạng thái
+                </option>
+                <option value="true">Đang hoạt động</option>
+                <option value="false">Đã vô hiệu hoá</option>
+              </select>
+            </div>
+
+            {/* Host select */}
+            <div className="d-flex align-items-center gap-2">
+              <select
+                className="form-select form-select-sm"
+                value={isHost}
+                onChange={handleIsHostChange}
+                style={{ width: 320 }}
+              >
+                <option value="" disabled hidden>
+                  Vai trò
+                </option>
+                <option value="true">Chủ trọ</option>
+                <option value="false">Không phải chủ trọ</option>
+              </select>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div className="card border-0 shadow-sm rounded-4 overflow-hidden">
@@ -116,7 +205,7 @@ export default function UserManager() {
                 </th>
                 <th>Tên đăng nhập</th>
                 <th>Email</th>
-                <th style={{ width: 140 }}>Vai trò</th>
+                <th style={{ width: 160 }}>Vai trò</th>
                 <th style={{ width: 140 }}>Trạng thái</th>
                 <th style={{ width: 220 }} className="text-end">
                   Thao tác
@@ -124,21 +213,11 @@ export default function UserManager() {
               </tr>
             </thead>
             <tbody>
-              {loadingList && (
-                <tr>
-                  <td colSpan={6} className="text-center py-5">
-                    <div className="d-flex flex-column align-items-center">
-                      <div className="spinner-border mb-2" role="status"></div>
-                      <div className="small text-muted">Đang tải...</div>
-                    </div>
-                  </td>
-                </tr>
-              )}
-
               {!loadingList &&
                 data.map((row, idx) => (
-                  <tr key={row.id ?? idx}>
-                    <td className="text-center">{idx + 1}</td>
+                  <tr key={row.id ?? `${page}-${idx}`}>
+                    <td className="text-center">{page * size + idx + 1}</td>
+
                     <td className="text-truncate" style={{ maxWidth: 240 }}>
                       {row.username}
                     </td>
@@ -146,9 +225,20 @@ export default function UserManager() {
                       {row.email}
                     </td>
                     <td>
-                      <span className="badge text-bg-secondary">
-                        {row.roles}
-                      </span>
+                      {Array.isArray(row.roles) ? (
+                        row.roles.map((r, i) => (
+                          <span
+                            key={i}
+                            className="badge text-bg-secondary me-1"
+                          >
+                            {r}
+                          </span>
+                        ))
+                      ) : (
+                        <span className="badge text-bg-secondary">
+                          {row.roles}
+                        </span>
+                      )}
                     </td>
                     <td>
                       {row.enabled ? (
@@ -167,7 +257,6 @@ export default function UserManager() {
                           className="btn btn-outline-primary"
                           onClick={() => handleEdit(row)}
                           title="Sửa"
-                          disabled={busy}
                         >
                           <i className="bi bi-pencil-square"></i>
                         </button>
@@ -175,7 +264,6 @@ export default function UserManager() {
                           className="btn btn-outline-secondary"
                           onClick={() => handleView(row)}
                           title="Xem chi tiết"
-                          disabled={busy}
                         >
                           <i className="bi bi-eye"></i>
                         </button>
@@ -187,7 +275,6 @@ export default function UserManager() {
                           }
                           onClick={() => openConfirmToggle(row)}
                           title={row.enabled ? 'Vô hiệu hoá' : 'Mở khoá'}
-                          disabled={busy}
                         >
                           <i
                             className={
@@ -206,31 +293,62 @@ export default function UserManager() {
             </tbody>
           </table>
         </div>
+
+        {/* Pager */}
+        <div className="d-flex align-items-center justify-content-between px-3 py-2 border-top bg-light-subtle">
+          <div className="small text-muted">
+            Tổng: <strong>{totalElements}</strong> • Trang{' '}
+            {totalPages === 0 ? 0 : page + 1}/{totalPages}
+          </div>
+
+          {/* Page size */}
+          <div className="ms-auto d-flex align-items-center gap-2">
+            <span className="text-muted small">Mỗi trang</span>
+            <select
+              className="form-select form-select-sm"
+              style={{ width: 84 }}
+              value={size}
+              onChange={(e) => {
+                setSize(Number(e.target.value))
+                setPage(0)
+              }}
+            >
+              <option value={10}>10</option>
+              <option value={20}>20</option>
+              <option value={50}>50</option>
+            </select>
+          </div>
+
+          <div className="btn-group">
+            <button
+              className="btn btn-sm btn-outline-secondary"
+              disabled={!canPrev || loadingList}
+              onClick={() => setPage((p) => Math.max(0, p - 1))}
+            >
+              <i className="bi bi-chevron-left me-1" /> Trước
+            </button>
+            <button
+              className="btn btn-sm btn-outline-secondary"
+              disabled={!canNext || loadingList}
+              onClick={() => setPage((p) => p + 1)}
+            >
+              Sau <i className="bi bi-chevron-right ms-1" />
+            </button>
+          </div>
+        </div>
       </div>
 
       {/* Modal Form */}
       {formOpen && (
         <AccountFormModal
-          key={editing?.id || formMode} // ép remount khi đổi user/mode
+          key={editing?.id || formMode}
           mode={formMode}
-          title={
-            formMode === 'create'
-              ? 'Thêm tài khoản'
-              : formMode === 'edit'
-                ? 'Sửa tài khoản'
-                : 'Xem chi tiết'
-          }
           onClose={() => {
             setFormOpen(false)
             setEditing(null)
           }}
-          onSubmit={formMode === 'detail' ? undefined : onSubmitForm}
-          getApi={getApi} // truyền xuống form theo yêu cầu
-          data={
-            formMode === 'create'
-              ? { username: '', email: '', role: 'USER', enabled: true }
-              : editing
-          }
+          getApi={fetchList}
+          data={editing}
         />
       )}
 
