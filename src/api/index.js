@@ -1,3 +1,4 @@
+
 import http from './http'
 
 const apiList = {
@@ -17,13 +18,46 @@ const apiList = {
   adminUpdateUser: (id,data) => http.patch(`/user/${id}`,data),
 
   // RoomType
-  getRoomType: () => http.get('/admin/room-types'),
-  postRoomType: (data) => http.post('/admin/room-types',data),
-  putRoomType: (id,data) => http.put(`/admin/room-types/${id}`,data),
-  deleteRoomType: (id) => http.delete(`/admin/room-types/${id}`),
+  getRoomType: () => http.get('/room-types'),
+  postRoomType: (data) => http.post('/room-types',data),
+  putRoomType: (id,data) => http.put(`/room-types/${id}`,data),
+  deleteRoomType: (id) => http.delete(`/room-types/${id}`),
 
-  // Admin
-  getHostRequest: () => http.get('/admin/host-requests/pending'),
+  // AdminHostRequest
+  getHostRequest: (data) => http.get('/admin/host-requests/list',data),
+  approveHostRequest: (id,data) => http.put(`/admin/host-requests/${id}/approve`,data),
+  rejectHostRequest: (id,data) => http.put(`/admin/host-requests/${id}/reject`,data),
+
+  // Room
+  getRoom: (data) => http.get('/rooms/search', data),
+  getRoomMe: (data) => http.get('/rooms/me', data),
+  getRoomId: (id,data) => http.get(`/rooms/${id}`, data),
+  createRoom: (data) => http.post(`/rooms`, data),
+  deleteRoom: (id) => http.delete(`/rooms/${id}`),
+  updateRoom: (id, data) => http.put(`/rooms/${id}`, data),
+  // location
+  getProvinces: () => http.get('/areas/provinces'),
+  getDistricts: (id) => http.get(`/areas/districts?provinceId=${id}`),
+  getWards: (id) => http.get(`/areas/wards?districtId=${id}`),
+
+  //Host
+
+  // Amenity
+  getAmenity: () => http.get('/amenity'),
+  postAmenity: (data) => http.post('/amenity',data),
+  deleteAmenity: (id) => http.delete(`/amenity/${id}`),
+  putAmenity: (id, data) => http.put(`/amenity/${id}`,data),
+
+  // Image
+uploadImage : (file, name) => {
+  const fd = new FormData()
+  fd.append('file', file) // trùng với @RequestPart("file")
+  const q = name ? `?name=${encodeURIComponent(name)}` : ''
+  return http.postForm(`/files/images${q}`, fd)
+}
+  
+
+
 
   
 

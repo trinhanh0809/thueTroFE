@@ -12,9 +12,12 @@ import RoleGuard from './RoleGuard'
 import AdminLayout from '@/manager/components/AdminLayout'
 import UserManager from '@/manager/admin/UserManager'
 import Dashboard from '@/manager/admin/Dashboard'
-import HostPage from '@/manager/host/Host'
 import RoomTypeManager from '@/manager/admin/RoomTypeManager'
 import RoomManager from '@/manager/admin/RoomManager'
+import HostRequestManager from '@/manager/admin/HostRequestManager'
+import RoomFormPage from '@/manager/admin/RoomManager/form'
+import AmenityManager from '@/manager/admin/AmenityManager'
+import RoomManger from '@/manager/host/RoomManager'
 
 const adminNavItems = [
   { key: 'admin-home', label: 'Trang chủ', to: '/admin', end: true },
@@ -36,20 +39,34 @@ const adminNavItems = [
     to: '/admin/quan-ly-loai-phong',
   },
   {
+    key: 'admin-browse',
+    label: 'Danh sách tiện ích',
+    to: '/admin/danh-sach-tien-ich',
+  },
+  {
     key: 'admin-room',
     label: 'Danh sách phòng trọ',
     to: '/admin/danh-sach-phong-tro',
   },
-  {
-    key: 'admin-browse',
-    label: 'Danh sách phòng trọ cần duyệt',
-    to: '/admin/danh-sach-phong-tro-can-duyet',
-  },
 ]
 
 const hostNavItems = [
-  // { key: 'host-home', label: 'Trang chủ', to: '/host', end: true },
-  { key: 'host-rooms', label: 'Phòng trọ', to: '/host/phong-tro' },
+  { key: 'host-rooms', label: 'Danh sách phòng trọ', to: '/host/phong-tro' },
+  {
+    key: 'manager-rooms',
+    label: 'Quản lý phòng trọ',
+    to: '/host/quan-ly-phong-tro',
+  },
+  {
+    key: 'contact-rooms',
+    label: 'Quản lý hợp đồng',
+    to: '/host/quan-ly-hop-dong',
+  },
+  {
+    key: 'invoice-rooms',
+    label: 'Quản lý hoá đơn',
+    to: '/host/quan-ly-hoa-don',
+  },
 ]
 
 const routeConfig = [
@@ -73,10 +90,24 @@ const routeConfig = [
     children: [
       { index: true, element: <Dashboard /> },
       { path: 'quan-ly-tai-khoan', element: <UserManager /> },
-      { path: 'quan-ly-tai-khoan-can-duyet', element: <UserManager /> },
+      { path: 'quan-ly-tai-khoan-can-duyet', element: <HostRequestManager /> },
       { path: 'quan-ly-loai-phong', element: <RoomTypeManager /> },
+      { path: 'danh-sach-tien-ich', element: <AmenityManager /> },
+
+      // Trang dạng detail
       { path: 'danh-sach-phong-tro', element: <RoomManager /> },
-      { path: 'danh-sach-phong-tro-can-duyet', element: <RoomManager /> },
+      // {
+      //   path: 'danh-sach-phong-tro/tao-moi',
+      //   element: <RoomFormPage mode="create" />,
+      // },
+      {
+        path: 'danh-sach-phong-tro/:id',
+        element: <RoomFormPage mode="detail" />,
+      },
+      // {
+      //   path: 'danh-sach-phong-tro/:id/sua',
+      //   element: <RoomFormPage mode="edit" />,
+      // },
     ],
   },
   //Host
@@ -88,7 +119,18 @@ const routeConfig = [
     layout: EmptyLayout,
     children: [
       // { index: true, element: <Dashboard /> },
-      { path: 'phong-tro', element: <HostPage /> },
+      { path: 'phong-tro', element: <RoomManger /> },
+      { path: 'quan-ly-phong-tro', element: <RoomManger /> },
+      { path: 'quan-ly-hop-dong', element: <RoomManger /> },
+      { path: 'quan-ly-hoa-don', element: <RoomManger /> },
+      {
+        path: 'danh-sach-phong-tro/tao-moi',
+        element: <RoomFormPage mode="create" />,
+      },
+      {
+        path: 'danh-sach-phong-tro/:id/sua',
+        element: <RoomFormPage mode="edit" />,
+      },
     ],
   },
 

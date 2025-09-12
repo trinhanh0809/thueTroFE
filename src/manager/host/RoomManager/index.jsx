@@ -27,7 +27,7 @@ function EmptyRow({ colSpan }) {
   )
 }
 
-export default function RoomIndex() {
+export default function RoomManger() {
   const nav = useNavigate()
   const location = useLocation()
 
@@ -128,7 +128,7 @@ export default function RoomIndex() {
       syncUrl()
       // BE: public search (APPROVED)
       // TODO: map đúng API tìm kiếm
-      const { status, data } = await apiList.getRoom(buildParams())
+      const { status, data } = await apiList.getRoomMe(buildParams())
       if (status === 200) {
         setRows(Array.isArray(data?.content) ? data.content : [])
         setTotalPages(data?.totalPages ?? 0)
@@ -243,6 +243,12 @@ export default function RoomIndex() {
     <div className="container py-4">
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h4 className="mb-0">Quản lý phòng</h4>
+        <button
+          className="btn btn-primary"
+          onClick={() => nav('/host/danh-sach-phong-tro/tao-moi')}
+        >
+          <i className="bi bi-plus-lg me-2" /> Thêm phòng
+        </button>
       </div>
 
       {/* Filters */}
@@ -455,11 +461,11 @@ export default function RoomIndex() {
                       {fmtVND(r.priceMonth)}
                     </td>
                     <td className="text-end">
-                      {/* <div className="btn-group btn-group-sm">
+                      <div className="btn-group btn-group-sm">
                         <button
                           className="btn btn-outline-primary"
                           onClick={() =>
-                            nav(`/admin/danh-sach-phong-tro/${r.id}/sua`)
+                            nav(`/host/danh-sach-phong-tro/${r.id}/sua`)
                           }
                           title="Sửa"
                         >
@@ -485,7 +491,7 @@ export default function RoomIndex() {
                         >
                           <i className="bi bi-trash3" />
                         </button>
-                      </div> */}
+                      </div>
                     </td>
                   </tr>
                 ))}
