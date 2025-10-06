@@ -10,7 +10,7 @@ const FormInput = forwardRef(function FormInput(
     name,
     value,
     onChange,
-    onBlur, // ⬅️ giữ onBlur từ ngoài
+    onBlur,
     type = 'text',
     placeholder,
     required = false,
@@ -21,22 +21,21 @@ const FormInput = forwardRef(function FormInput(
     size = 'md',
     className,
     inputClassName,
-    errorOnBlur = false, // ⬅️ mới: chỉ hiện lỗi sau blur nếu true
+    errorOnBlur = false,
     ...rest
   },
   ref
 ) {
   const rid = useId()
   const [show, setShow] = useState(false)
-  const [touched, setTouched] = useState(false) // ⬅️ mới
+  const [touched, setTouched] = useState(false)
   const isPassword = type === 'password'
   const inputType =
     isPassword && passwordToggle ? (show ? 'text' : 'password') : type
 
-  const showErr = Boolean(error) && (!errorOnBlur || touched) // ⬅️ mới
+  const showErr = Boolean(error) && (!errorOnBlur || touched)
 
   const handleBlur = (e) => {
-    // ⬅️ mới
     setTouched(true)
     onBlur?.(e)
   }
@@ -47,7 +46,7 @@ const FormInput = forwardRef(function FormInput(
         'ui-field',
         size === 'lg' && 'ui-field-lg',
         disabled && 'is-disabled',
-        showErr && 'is-invalid', // ⬅️ đổi: dùng showErr
+        showErr && 'is-invalid',
         className
       )}
     >
@@ -72,7 +71,7 @@ const FormInput = forwardRef(function FormInput(
           name={name}
           value={value}
           onChange={onChange}
-          onBlur={handleBlur} // ⬅️ đổi: wrap để set touched
+          onBlur={handleBlur}
           type={inputType}
           placeholder={placeholder}
           disabled={disabled}
@@ -94,7 +93,7 @@ const FormInput = forwardRef(function FormInput(
         )}
       </div>
 
-      {showErr ? ( // ⬅️ đổi: dùng showErr
+      {showErr ? (
         <div className="ui-help error">{error}</div>
       ) : (
         hint && <div className="ui-help">{hint}</div>

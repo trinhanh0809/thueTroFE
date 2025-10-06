@@ -6,7 +6,6 @@
   --tm-green: #10b981;
 }
 
-/* ===== Header layout ===== */
 .tm-header {
   position: sticky;
   top: 0;
@@ -29,7 +28,6 @@
   gap: 16px;
 }
 
-/* ===== Brand ===== */
 .brand {
   display: inline-flex;
   align-items: center;
@@ -38,10 +36,9 @@
   font-weight: 800;
   letter-spacing: .2px;
 }
-.brand img { height: 40px; width: auto; }
+.brand img {  width: auto; }
 .brand span { font-size: 18px; }
 
-/* ===== Nav ===== */
 .nav {
   display: flex;
   align-items: center;
@@ -49,7 +46,6 @@
   margin-left: 8px;
 }
 
-/* Hỗ trợ cả .nav-link và .nav a */
 .nav-link,
 .nav a {
   position: relative;
@@ -66,7 +62,6 @@
 .nav-link.active,
 .nav a.active { color: var(--tm-primary); border-color: var(--tm-primary); }
 
-/* Box mờ dưới chữ khi hover/focus */
 .nav-link::after,
 .nav a::after {
   content: "";
@@ -83,15 +78,8 @@
   transition: opacity .25s ease, transform .25s ease;
   pointer-events: none;
 }
-.nav-link:hover::after,
-.nav-link:focus-visible::after,
-.nav a:hover::after,
-.nav a:focus-visible::after {
-  /* opacity: 1;
-  transform: translateY(0); */
-}
 
-/* ===== Search box ===== */
+
 .search-box { display: flex; align-items: center; margin-left: 1rem; }
 .search-box input {
   padding: 6px 10px;
@@ -108,7 +96,6 @@
   cursor: pointer;
 }
 
-/* ===== App badge ===== */
 .app-btn {
   display: inline-flex; align-items: center; gap: 6px;
   padding: 6px 10px;
@@ -124,16 +111,13 @@
   border: 2px solid var(--tm-green);
   border-radius: 3px;
 }
-
-/* ===== Right actions ===== */
 .right { display: flex; align-items: center; gap: 12px; }
 .link { color: var(--tm-text); text-decoration: none; font-size: 14px; }
 .link:hover { color: #111827; }
 
-/* ===== Post button ===== */
 .post-btn {
-  background: #0b5ed7;
-  border: none;
+  background: #ff5c00 !important;
+  border: none !important;
   color: #fff;
   font-weight: 600;
   padding: 10px 14px;
@@ -142,7 +126,6 @@
 }
 .post-btn:hover { filter: brightness(0.95); }
 
-/* ===== User menu ===== */
 .user-wrap { position: relative; }
 .avatar {
   width: 34px; height: 34px;
@@ -172,7 +155,6 @@
 .menu-item:hover { background: #f8fafc; }
 .menu-item.danger { color: #dc2626; }
 
-/* ===== Hamburger (mobile) ===== */
 .hamburger {
   display: none;
   width: 36px; height: 36px;
@@ -186,7 +168,6 @@
   width: 18px; height: 2px; background: #111827; margin: 2px 0;
 }
 
-/* ===== Responsive ===== */
 @media (max-width: 992px) {
   .nav { display: none; }
   .nav.open {
@@ -206,3 +187,15 @@
   font-size: 16px;
   font-weight: 600;
 }
+
+.nav__button {
+  border: none;
+  background-color: #fff;
+}
+
+.nav__button:hover {
+  background-color: #ff5c00;
+  color: #fff;
+  border-radius: 20px;
+}
+

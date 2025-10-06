@@ -1,4 +1,3 @@
-// src/components/layout/Container.jsx
 export default function Container({
   as: Tag = 'div',
   className = '',

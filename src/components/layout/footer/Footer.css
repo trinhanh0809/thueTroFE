@@ -8,7 +8,7 @@ body { font-family: 'Inter', -apple-system, 'Segoe UI', sans-serif; }
 }
 
 .tm-col-title {
-  color: #1d57c5;          /* xanh giống ảnh */
+  color: #ff5c00;       
   text-transform: uppercase;
   letter-spacing: .3px;
   font-weight: 700;

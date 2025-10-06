@@ -63,7 +63,7 @@
 .checkbox { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; color: #4b5563; }
 .checkbox input { width: 16px; height: 16px; }
 
-.row { display: flex; gap: 12px; align-items: center; }
+/* .row { display: flex; gap: 12px; align-items: center; } */
 .between { justify-content: space-between; }
 
 .primary {

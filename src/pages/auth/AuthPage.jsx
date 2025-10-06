@@ -78,7 +78,7 @@ export default function AuthPage() {
           : 'Đăng ký thành công! Vui lòng kiểm tra email để kích hoạt tài khoản.'
       )
       setMode('signin')
-      dispatch(logout && logout()) // nếu có action
+      dispatch(logout && logout())
       localStorage.removeItem('token')
       if (AuthApi?.defaults?.headers)
         delete AuthApi.defaults.headers.Authorization
@@ -90,9 +90,7 @@ export default function AuthPage() {
 
   return (
     <div className="auth-split">
-      <div className="auth-hero">
-        <div className="overlay" />
-      </div>
+      <div className="auth-hero"></div>
       <div className="auth-panel">
         <div className="auth-card">
           <div className="auth-header">
