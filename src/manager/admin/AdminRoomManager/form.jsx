@@ -7,7 +7,7 @@ import apiList from '@/api'
 const MAX_IMAGES = 15
 const MIN_IMAGES = 3
 
-export default function RoomFormPage({ mode = 'create' }) {
+export default function AdminRoomFormPage({ mode = 'create' }) {
   const nav = useNavigate()
   const { id } = useParams()
   const isEdit = mode === 'edit'
@@ -144,7 +144,7 @@ export default function RoomFormPage({ mode = 'create' }) {
 
           setValues((s) => ({
             ...s,
-            roomTypeId: data.roomType?.id ? String(data.roomType.id) : '',
+            roomTypeId: data.roomTypeId ? String(data.roomTypeId) : '',
             provinceId: data.provinceId ? String(data.provinceId) : '',
             districtId: data.districtId ? String(data.districtId) : '',
             wardId: data.wardId ? String(data.wardId) : '',
@@ -246,6 +246,7 @@ export default function RoomFormPage({ mode = 'create' }) {
     if (isBlob(u))
       try {
         URL.revokeObjectURL(u)
+        // eslint-disable-next-line no-empty
       } catch {}
   }
 

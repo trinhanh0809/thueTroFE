@@ -1,0 +1,24 @@
+
+.searchbar.hero {
+  
+}
+.searchbar.hero .form-control,
+.searchbar.hero .form-select {
+  background: #fff;
+  border-radius: 10px;
+}
+.searchbar.inline {
+  background: #ff6a00;      
+  border-radius: 20px;
+}
+.searchbar .btn.btn-warning {
+  background: #fff;
+  border: none;
+  border-radius: 10px;
+}
+.container_search {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+}

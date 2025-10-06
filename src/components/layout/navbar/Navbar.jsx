@@ -1,13 +1,12 @@
-// components/layout/Navbar.jsx
 import { useEffect, useMemo, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { logout, selectAuthView } from '@/redux/authSlice'
 import '@/components/layout/navbar/Navbar.css'
 import apiList from '@/api'
-import Search from '@/components/ui/Search'
 import Button from '@/components/ui/Button'
 import Container from '../Container'
+import logo from '@/assets/image/logo.png'
 
 export default function Navbar() {
   const { user } = useSelector((s) => s.auth)
@@ -16,13 +15,13 @@ export default function Navbar() {
   const navigate = useNavigate()
 
   const [openMenu, setOpenMenu] = useState(false)
-  const [roomType, setRoomType] = useState()
+  const [roomTypes, setRoomTypes] = useState([])
 
   useEffect(() => {
     ;(async () => {
       try {
         const { status, data } = await apiList.getRoomType()
-        if (status === 200) setRoomType(data)
+        if (status === 200) setRoomTypes(data)
       } catch (e) {
         console.error(e)
       }
@@ -36,16 +35,15 @@ export default function Navbar() {
 
   // Phân quyền
   const isAdmin = roles?.includes('ADMIN')
-  const isHost = roles?.includes('HOST') // admin có thể đồng thời là host, nhưng ưu tiên điều hướng admin
+  const isHost = roles?.includes('HOST')
 
-  // Điều hướng nút chính (đăng tin / admin / host-status)
   const handlePrimaryClick = () => {
     if (isAdmin) {
-      navigate('/admin') // ADMIN → trang quản trị
+      navigate('/admin')
     } else if (isHost) {
-      navigate('/host/new') // HOST → đăng tin
+      navigate('/host/phong-tro')
     } else {
-      navigate('/host-status') // user thường → trang đăng ký/chờ duyệt làm chủ trọ
+      navigate('/')
     }
   }
 
@@ -55,42 +53,63 @@ export default function Navbar() {
       ? 'Đăng tin'
       : 'Chưa đăng kí'
 
+  const goToRoomListPull = (rt) => {
+    const sp = new URLSearchParams({
+      roomTypeId: rt.id,
+      page: '0',
+      size: '20',
+    })
+    navigate({ pathname: '/rooms', search: sp.toString() })
+  }
+
+  const roomListPull = () => {
+    const sp = new URLSearchParams({
+      page: '0',
+      size: '20',
+    })
+    navigate({ pathname: '/rooms', search: sp.toString() })
+  }
+
   return (
     <header className="tm-header">
       <Container>
         <div className="tm-container">
-          {/* Left */}
           <div className="left">
             <Link to="/" className="brand">
-              <img src="https://tromoi.com/logo.png" alt="logo" />
+              <img src={logo} alt="logo" width={174} height={73} />
             </Link>
 
             <nav className="nav">
-              <Link to="phong-tro">Phòng trọ xịn</Link>
-              <Link to="chinh-sach">Chính sách thuê trọ</Link>
+              <button className="nav__button" onClick={roomListPull}>
+                Phòng trọ xịn
+              </button>
+              <button className="nav__button" onClick={roomListPull}>
+                Chính sách thuê trọ
+              </button>
 
-              <div className="dropdown">
+              <div className="dropdown ">
                 <button
-                  className="btn dropdown-toggle bottom_btn"
+                  className="nav__button"
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
                 >
                   Loại phòng
                 </button>
                 <ul className="dropdown-menu">
-                  {(roomType ?? []).map((p) => (
-                    <li key={p.id}>
-                      <a className="dropdown-item" href={p.href ?? '#'}>
-                        {p.name}
-                      </a>
+                  {roomTypes.map((rt) => (
+                    <li key={rt.id}>
+                      <button
+                        type="button"
+                        className="dropdown-item"
+                        onClick={() => goToRoomListPull(rt)}
+                      >
+                        {rt.name}
+                      </button>
                     </li>
                   ))}
                 </ul>
               </div>
             </nav>
-
-            {/* Ô tìm kiếm */}
-            <Search placeholder="Tìm theo khu vực..." />
           </div>
 
           {/* Right */}
@@ -138,7 +157,6 @@ export default function Navbar() {
                         {displayName}
                       </div>
 
-                      {/* Admin ưu tiên hiện trang quản trị */}
                       {isAdmin ? (
                         <>
                           <Link

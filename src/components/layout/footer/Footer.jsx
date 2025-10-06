@@ -1,5 +1,6 @@
 import React from 'react'
 import '@/components/layout/footer/Footer.css'
+import logo from '@/assets/image/logo.png'
 export default function Footer() {
   return (
     <footer className="tm-footer">
@@ -7,30 +8,11 @@ export default function Footer() {
         <div className="row gy-4">
           {/* Col 1: Logo + app + members */}
           <div className="col-12 col-lg-5">
-            <img src="https://tromoi.com/logo.png" alt="TRỌ MỚI" height="36" />
+            <img src={logo} alt="TRỌ MỚI" height="76" width={120} />
             <p className="mt-3 fw-semibold text-uppercase small text-primary m-0">
-              Tải app trọ mới ngay
+              Rất nhiều trọ mới và đẹp !!
             </p>
-
-            <div className="d-flex gap-3 mt-2 align-items-center flex-wrap">
-              {/* <a href="#" className="app-badge">
-                <img src="/badges/appstore.svg" alt="App Store" height="48" />
-              </a>
-              <a href="#" className="app-badge">
-                <img
-                  src="/badges/googleplay.svg"
-                  alt="Google Play"
-                  height="48"
-                />
-              </a> */}
-              {/* QR */}
-              {/* <img src="/qr.png" alt="QR" height="80" className="ms-lg-2" /> */}
-            </div>
-
-            <div className="mt-3 small text-muted">
-              Thành viên của <strong>ohi.vn</strong>
-            </div>
-            <div className="d-flex flex-wrap gap-3 mt-2 align-items-center">
+            {/* <div className="d-flex flex-wrap gap-3 mt-2 align-items-center">
               <img src="/partners/ohdidi.svg" alt="ohdidi" height="22" />
               <img src="/partners/ohbeauti.svg" alt="ohbeauti" height="22" />
               <img
@@ -40,7 +22,7 @@ export default function Footer() {
               />
               <img src="/partners/house.svg" alt="nhà đẹp rẻ tốt" height="22" />
               <img src="/partners/office.svg" alt="mặt bằng mới" height="22" />
-            </div>
+            </div> */}
           </div>
 
           {/* Col 2: Links */}
@@ -82,11 +64,11 @@ export default function Footer() {
             <ul className="tm-list">
               <li className="d-flex gap-2">
                 <i className="bi bi-telephone text-primary"></i>
-                <span>033.266.1579</span>
+                <span>0334446046</span>
               </li>
               <li className="d-flex gap-2">
                 <i className="bi bi-telephone text-primary"></i>
-                <span>Zalo: 0332661579</span>
+                <span>Zalo: 0334446046</span>
               </li>
               <li className="d-flex gap-2">
                 <i className="bi bi-envelope text-primary"></i>
@@ -94,11 +76,7 @@ export default function Footer() {
               </li>
               <li className="d-flex gap-2">
                 <i className="bi bi-geo-alt text-primary"></i>
-                <span>VP Huế: 4/16 Đoàn Hữu Trưng, TP. Huế</span>
-              </li>
-              <li className="d-flex gap-2">
-                <i className="bi bi-geo-alt text-primary"></i>
-                <span>VP HCM: 19 Đường Số 23, P.10, Q.6</span>
+                <span>VP HN: 163 đông ngạc, quận bắc từ liêm, hà nội</span>
               </li>
             </ul>
 
@@ -123,7 +101,7 @@ export default function Footer() {
       {/* Bottom bar */}
       <div className="tm-bottom">
         <div className="container text-center small">
-          Copyright © 2015 - 2025 OHI Co.,Ltd
+          Copyright © 2015 - 2025 Co.,Ltd
         </div>
       </div>
     </footer>

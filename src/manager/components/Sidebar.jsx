@@ -5,11 +5,17 @@ export default function Sidebar({ items = [], width = 240 }) {
   const location = useLocation()
   return (
     <aside
-      className="bg-dark text-light min-vh-100 position-sticky top-0"
-      style={{ width }}
+      className="text-light min-vh-100 position-sticky top-0 border-end"
+      style={{
+        width,
+        borderColor: 'rgba(0,0,0,0.1)', // line dọc rất nhạt
+      }}
     >
-      <div className="px-3 py-3 border-bottom border-secondary">
-        <NavLink to="/" className="text-decoration-none text-light fw-bold">
+      <div
+        className="px-3 py-3 border-bottom"
+        style={{ borderColor: 'rgba(0,0,0,0.1)' }}
+      >
+        <NavLink to="/" className="text-decoration-none fw-bold">
           {location.pathname.startsWith('/admin')
             ? 'Quản trị hệ thống'
             : location.pathname.startsWith('/host')

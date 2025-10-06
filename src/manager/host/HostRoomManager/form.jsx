@@ -3,11 +3,10 @@ import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import apiList from '@/api'
-
 const MAX_IMAGES = 15
 const MIN_IMAGES = 3
 
-export default function RoomFormPage({ mode = 'create' }) {
+export default function HostRoomFormPage({ mode = 'create' }) {
   const nav = useNavigate()
   const { id } = useParams()
   const isEdit = mode === 'edit'
@@ -28,10 +27,10 @@ export default function RoomFormPage({ mode = 'create' }) {
   const [loadingWard, setLoadingWard] = useState(false)
 
   // ảnh (lazy upload)
-  const [uploading, setUploading] = useState(false) // chỉ hiển thị khi đang chọn file (preview), không gọi API
-  const [blobFiles, setBlobFiles] = useState({}) // { [blobUrl]: File }
-  const removedServerUrlsRef = useRef(new Set()) // URL server bị xoá trước khi lưu
-  const initialServerUrlsRef = useRef(new Set()) // URL server ban đầu (để đối chiếu)
+  const [uploading, setUploading] = useState(false)
+  const [blobFiles, setBlobFiles] = useState({})
+  const removedServerUrlsRef = useRef(new Set())
+  const initialServerUrlsRef = useRef(new Set())
 
   // form state
   const [values, setValues] = useState({
@@ -50,7 +49,7 @@ export default function RoomFormPage({ mode = 'create' }) {
     areaSqm: '',
     maxOccupancy: '',
     amenityIds: [],
-    imageUrls: [], // gồm cả blob:... và URL server
+    imageUrls: [],
   })
   const [addressEdited, setAddressEdited] = useState(false)
 
@@ -59,14 +58,13 @@ export default function RoomFormPage({ mode = 'create' }) {
     setValues((s) => ({ ...s, [name]: v }))
   }
 
-  // ------------ load options 1 lần ------------
   useEffect(() => {
     ;(async () => {
       try {
         setLoadingProv(true)
         const [rt, am, pv] = await Promise.all([
           apiList.getRoomType(),
-          apiList.getAmenities?.() ?? apiList.getAmenity?.(),
+          apiList.getAmenity?.(),
           apiList.getProvinces(),
         ])
         if (rt?.status === 200 && Array.isArray(rt.data)) setRoomTypes(rt.data)
@@ -79,28 +77,27 @@ export default function RoomFormPage({ mode = 'create' }) {
     })()
   }, [])
 
-  // ------------ dependent lists ------------
-  const loadDistricts = async (pid) => {
-    if (!pid) {
+  const loadDistricts = async (id) => {
+    if (!id) {
       setDistricts([])
       return
     }
     setLoadingDist(true)
     try {
-      const { status, data } = await apiList.getDistricts(pid)
+      const { status, data } = await apiList.getDistricts(id)
       if (status === 200 && Array.isArray(data)) setDistricts(data)
     } finally {
       setLoadingDist(false)
     }
   }
-  const loadWards = async (did) => {
-    if (!did) {
+  const loadWards = async (id) => {
+    if (!id) {
       setWards([])
       return
     }
     setLoadingWard(true)
     try {
-      const { status, data } = await apiList.getWards(did)
+      const { status, data } = await apiList.getWards(id)
       if (status === 200 && Array.isArray(data)) setWards(data)
     } finally {
       setLoadingWard(false)
@@ -145,7 +142,7 @@ export default function RoomFormPage({ mode = 'create' }) {
 
           setValues((s) => ({
             ...s,
-            roomTypeId: data.roomType?.id ? String(data.roomType.id) : '',
+            roomTypeId: data.roomTypeId ? String(data.roomTypeId) : '',
             provinceId: data.provinceId ? String(data.provinceId) : '',
             districtId: data.districtId ? String(data.districtId) : '',
             wardId: data.wardId ? String(data.wardId) : '',
@@ -247,6 +244,7 @@ export default function RoomFormPage({ mode = 'create' }) {
     if (isBlob(u))
       try {
         URL.revokeObjectURL(u)
+        // eslint-disable-next-line no-empty
       } catch {}
   }
 
@@ -352,7 +350,7 @@ export default function RoomFormPage({ mode = 'create' }) {
       const payload = buildPayload(uploaded)
 
       if (isEdit) {
-        await toast.promise(apiList.rooms.update(id, payload), {
+        await toast.promise(apiList.updateRoom(id, payload), {
           pending: 'Đang cập nhật...',
           success: 'Đã cập nhật',
           error: 'Cập nhật thất bại',
@@ -366,7 +364,7 @@ export default function RoomFormPage({ mode = 'create' }) {
         const newId = res?.data?.id || res?.id
         // reset removed list vì tạo mới không có xóa server
         removedServerUrlsRef.current = new Set()
-        nav(`/admin/danh-sach-phong-tro/${newId || ''}`)
+        nav(`/host/danh-sach-phong-tro/${newId || ''}`)
         return
       }
 

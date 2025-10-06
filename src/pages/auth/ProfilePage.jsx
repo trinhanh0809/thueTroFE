@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import AuthApi from '@/api'
 import Container from '@/components/layout/Container'
+import apiList from '@/api'
 
 export default function ProfilePage() {
   const [me, setMe] = useState(null)
@@ -56,18 +57,12 @@ export default function ProfilePage() {
 
   const onLogout = async () => {
     try {
-      // Nếu có API logout thì gọi, nếu không thì xóa token localStorage/cookie
-      if (AuthApi.logout) await AuthApi.logout()
       localStorage.removeItem('access_token')
       window.location.href = '/login'
     } catch {
       window.location.href = '/login'
     }
   }
-
-  if (loading)
-    return <div className="alert alert-secondary m-3">Đang tải...</div>
-
   return (
     <Container>
       <div className="py-3">

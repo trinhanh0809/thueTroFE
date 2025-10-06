@@ -10,7 +10,7 @@ export default function Topbar({
 
   return (
     <nav
-      className="navbar bg-white border-bottom sticky-top"
+      className="navbar bg-white border-bottom sticky-top  z-3"
       style={{ height: 56 }}
     >
       <div className="container-fluid">

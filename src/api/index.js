@@ -6,12 +6,12 @@ const apiList = {
   getAll: () => http.get('/user/all'),
   getUser: (data) => http.get('/user/search',data),
   register: (data) => http.post('/user/register', data),
-  activate: (query) => http.get('/user/activate', query), // { email, code }
+  activate: (query) => http.get('/user/activate', query),
   login: (data) => http.post('/user/authenticate', data),
   me: () => http.get('/user/me'),
   changePassword: (data) => http.put('/user/change-password', data),
   forgotPassword: (data) => http.put('/user/forgot-password', data),
-  changeAvatar: (data) => http.put('/user/change-avatar', data), // { url }
+  changeAvatar: (data) => http.put('/user/change-avatar', data), 
   updateProfile: (data) => http.put('/user/update-profile', data),
   myHostStatus: () => http.get('/user/me/host-status'),
   toggleEnabled: (id) => http.patch(`/user/${id}/toggle-enabled`),
@@ -49,14 +49,19 @@ const apiList = {
   putAmenity: (id, data) => http.put(`/amenity/${id}`,data),
 
   // Image
-uploadImage : (file, name) => {
+  uploadImage : (file, name) => {
   const fd = new FormData()
-  fd.append('file', file) // trùng với @RequestPart("file")
+  fd.append('file', file)
   const q = name ? `?name=${encodeURIComponent(name)}` : ''
   return http.postForm(`/files/images${q}`, fd)
-}
+  },
   
-
+ // Blocks
+  getBlocks: () => http.get('/blocks'),
+  putBlock: (id, data) => http.put(`/blocks/${id}`, data),
+  deleteBlock: (id) => http.delete(`/blocks/${id}`),
+  getBlock: (id) => http.get(`/blocks/${id}`),
+  getBlockMe: () => http.get(`/blocks`),
 
 
   
